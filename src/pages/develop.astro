@@ -1,0 +1,272 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Develop | Portfolio" fullWidth={true}>
+	<div class="develop-page min-h-screen w-full bg-[#f2f2f2] flex flex-col items-center justify-center relative overflow-hidden cursor-none">
+		
+		<!-- Custom Cursor (Aperture) -->
+		<div id="aperture-cursor" class="fixed pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-transform duration-75 ease-out" style="width: 300vw; height: 300vh;">
+			<!-- 화면 전체를 가리는 뷰파인더 마스크 -->
+			<div class="absolute inset-0 bg-[#080808] opacity-80 viewfinder-mask"></div>
+			
+			<!-- 거대한 렌즈 외부 링 (이미지 참고: 두꺼운 금속 테두리와 음영) -->
+			<!-- bg-[#0a0a0a] 삭제: 가운데 구멍 투명도 유지 -->
+			<div class="lens-ring relative w-[460px] h-[460px] rounded-full flex items-center justify-center z-10">
+				
+				<!-- 렌즈 테두리 장식선 -->
+				<div class="absolute inset-2 rounded-full border border-white/5 pointer-events-none"></div>
+				<div class="absolute inset-6 rounded-full border border-black/50 shadow-[inset_0_0_20px_rgba(0,0,0,1)] pointer-events-none z-20"></div>
+
+				<!-- 진짜 카메라 조리개 (Base + Lines 완벽한 착시 구조) -->
+				<div class="iris relative w-[380px] h-[380px] rounded-full overflow-hidden">
+					<div class="shutter-base"></div>
+					<div class="blade" style="--i: 0;"></div>
+					<div class="blade" style="--i: 1;"></div>
+					<div class="blade" style="--i: 2;"></div>
+					<div class="blade" style="--i: 3;"></div>
+					<div class="blade" style="--i: 4;"></div>
+					<div class="blade" style="--i: 5;"></div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Shutter Toggle Button (우측 하단 위치) -->
+		<button id="shutter-toggle" class="fixed bottom-8 right-8 z-50 bg-[#494949] hover:bg-[#333] text-white border border-[#494949] px-6 py-3 rounded-full shadow-lg transition-colors text-xs font-bold tracking-wider cursor-pointer">
+			SHUTTER: ON
+		</button>
+
+		<!-- Content Wrapper (전체적으로 위로 끌어올림) -->
+		<div class="w-full max-w-7xl flex flex-col items-center -mt-32 md:-mt-48 z-10">
+			<!-- Title -->
+			<div class="w-full px-12 mb-20 flex justify-start">
+				<h1 class="text-7xl md:text-[7rem] font-medium tracking-tight develop-title">
+					Develop
+				</h1>
+			</div>
+			
+			<!-- Icons (간격 50px 증가: 기존 gap-24(96px) -> gap-40(160px)) -->
+			<div class="flex gap-20 md:gap-40 z-10">
+				
+				<!-- Study Icon -->
+				<a href="#" class="shutter-link group flex flex-col items-center gap-4 opacity-0 translate-y-10">
+					<span class="text-3xl font-light text-gray-600 tracking-wide">Study</span>
+					<div class="icon-box w-48 h-48 bg-[#242a35] rounded-[2.5rem] flex items-center justify-center shadow-[0_15px_35px_rgba(0,0,0,0.15)] transition-transform duration-300 group-hover:-translate-y-3">
+						<!-- Hummingbird Icon -->
+						<svg class="w-28 h-28 text-white opacity-90" fill="currentColor" viewBox="0 0 24 24"><path d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.845-.9-2.048-1.46-3.367-1.46-2.54 0-4.6 2.06-4.6 4.6 0 .36.042.71.12 1.048C7.69 8.09 4.27 6.27 2.013 3.44c-.396.68-.622 1.47-.622 2.316 0 1.595.812 3.003 2.046 3.827-.763-.025-1.48-.234-2.083-.575v.06c0 2.227 1.584 4.086 3.687 4.507-.386.105-.792.16-1.21.16-.296 0-.585-.028-.866-.08.585 1.826 2.28 3.157 4.29 3.194-1.572 1.233-3.553 1.968-5.698 1.968-.37 0-.735-.022-1.096-.064 2.032 1.3 4.444 2.06 7.03 2.06 8.435 0 13.05-6.985 13.05-13.05 0-.2-.004-.4-.012-.598.895-.646 1.67-1.452 2.28-2.36z"/></svg>
+					</div>
+				</a>
+
+				<!-- Project Icon (GitHub) -->
+				<a href="#" class="shutter-link group flex flex-col items-center gap-4 opacity-0 translate-y-10 delay-150">
+					<span class="text-3xl font-light text-gray-600 tracking-wide">Project</span>
+					<div class="icon-box w-48 h-48 bg-gradient-to-b from-[#a637ba] to-[#6d1792] rounded-[2.5rem] flex items-center justify-center shadow-[0_15px_35px_rgba(0,0,0,0.15)] transition-transform duration-300 group-hover:-translate-y-3">
+						<!-- GitHub Icon in white circle -->
+						<div class="w-28 h-28 bg-[#f5f5f5] rounded-full flex items-center justify-center shadow-inner">
+							<svg class="w-20 h-20 text-[#6d1792]" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+						</div>
+					</div>
+				</a>
+
+				<!-- Organize Icon (Vimeo-like V) -->
+				<a href="/project" class="shutter-link group flex flex-col items-center gap-4 opacity-0 translate-y-10 delay-300">
+					<span class="text-3xl font-light text-gray-600 tracking-wide">Organize</span>
+					<div class="icon-box w-48 h-48 bg-[#1fbc94] rounded-[2.5rem] flex items-center justify-center shadow-[0_15px_35px_rgba(0,0,0,0.15)] transition-transform duration-300 group-hover:-translate-y-3">
+						<!-- V Icon -->
+						<span class="text-white font-serif text-[6rem] font-bold italic drop-shadow-md">v</span>
+					</div>
+				</a>
+
+			</div>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	/* Background override for this page */
+	body {
+		background-color: #f2f2f2 !important;
+	}
+
+	/* 셔터 모드(ON)일 때 모든 하위 요소의 마우스 커서 숨김 강제 (단, 셔터 토글 버튼 제외) */
+	.develop-page.cursor-none *:not(#shutter-toggle) {
+		cursor: none !important;
+	}
+
+	/* 셔터 토글 버튼 위에서는 항상 진짜 마우스 포인터(손가락)가 보이도록 보장 */
+	#shutter-toggle {
+		cursor: pointer !important;
+	}
+
+	/* Embossed Title Effect */
+	.develop-title {
+		color: #ffffff;
+		text-shadow: 
+			1px 2px 4px rgba(0, 0, 0, 0.15), 
+			-1px -1px 2px rgba(255, 255, 255, 1);
+		-webkit-text-stroke: 0.5px rgba(0,0,0,0.05);
+	}
+
+	/* Gapless Reflection using -webkit-box-reflect */
+	.icon-box {
+		-webkit-box-reflect: below 2px linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.3));
+	}
+
+	/* Viewfinder Mask */
+	.viewfinder-mask {
+		-webkit-mask-image: radial-gradient(circle 220px at center, transparent 99%, black 100%);
+		mask-image: radial-gradient(circle 220px at center, transparent 99%, black 100%);
+	}
+
+	/* 거대한 카메라 렌즈 링 */
+	.lens-ring {
+		border: 38px solid #141414;
+		box-shadow: 
+			0 20px 50px rgba(0,0,0,0.6),
+			inset 0 10px 25px rgba(0,0,0,0.9),
+			inset 0 -5px 15px rgba(255,255,255,0.05);
+	}
+
+	/* True Iris Shutter CSS (9-blade) */
+	.iris {
+		/* Add a subtle dark background so the blades pop more */
+		background: rgba(0,0,0,0.05);
+	}
+	
+	/* 조리개 베이스: 카메라 구멍(투명)과 주변부 어두운 영역을 만듭니다. */
+	.shutter-base {
+		position: absolute;
+		top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
+		width: 250px;
+		height: 250px;
+		border-radius: 50%;
+		/* 그림자를 무한히 확장시켜 렌즈 주변부 금속을 만듭니다 (구멍은 투명) */
+		box-shadow: 0 0 0 400px #1c1c1c; 
+		background: transparent;
+		transition: width 0.4s cubic-bezier(0.5, 0, 0.2, 1), height 0.4s cubic-bezier(0.5, 0, 0.2, 1);
+		z-index: 1;
+	}
+	
+	/* 닫힐 때 베이스 구멍의 크기를 0으로 축소 */
+	.shutter-closed .shutter-base {
+		width: 0px;
+		height: 0px;
+	}
+
+	/* 날개(선): 제안해주신 대로 베이스 위에 얹어지는 선과 그림자로 착시를 만듭니다. */
+	.blade {
+		position: absolute;
+		top: 50%; left: 50%;
+		width: 400px;
+		height: 200px;
+		/* 선 아래로 살짝 퍼지는 그라데이션 금속 질감 */
+		background: linear-gradient(to bottom, rgba(255,255,255,0.06) 0%, transparent 100%);
+		/* 윗면 밝은 선 (제안하신 날개의 끝선) */
+		border-top: 1px solid rgba(255, 255, 255, 0.15);
+		/* 선 바깥쪽으로 지는 짙은 그림자 */
+		box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+		transform-origin: top center;
+		
+		/* 렌즈 중심에서 구멍의 반지름(125px)만큼 밖으로 밀어내어 선을 배치합니다. 
+		   6개 날개이므로 360/6 = 60도 간격으로 회전합니다. */
+		transform: translate(-50%, 0) rotate(calc(var(--i) * 60deg)) translateY(125px);
+		transition: transform 0.4s cubic-bezier(0.5, 0, 0.2, 1);
+		z-index: 2;
+	}
+
+	/* 닫힐 때 선들이 중심으로 회전하며 모여듭니다. 
+	   닫히는 맛을 살리기 위해 90도 더 비틀며 중앙으로 모이게 합니다. */
+	.shutter-closed .blade {
+		transform: translate(-50%, 0) rotate(calc(var(--i) * 60deg + 90deg)) translateY(0px);
+	}
+	
+	/* 렌즈 주변부에 둥근 음영을 주어 입체감을 더합니다 */
+	.iris::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(circle at center, transparent 35%, rgba(0,0,0,0.5) 100%);
+		pointer-events: none;
+		z-index: 3;
+	}
+
+	/* Entrance Animation */
+	@keyframes floatUp {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	.shutter-link {
+		animation: floatUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	}
+</style>
+
+<script>
+	const cursor = document.getElementById('aperture-cursor');
+	const toggleBtn = document.getElementById('shutter-toggle');
+	const pageContainer = document.querySelector('.develop-page');
+	let shutterEnabled = true;
+
+	// Toggle Shutter Logic
+	if(toggleBtn && pageContainer) {
+		toggleBtn.addEventListener('click', () => {
+			shutterEnabled = !shutterEnabled;
+			if(shutterEnabled) {
+				cursor.style.display = 'flex';
+				pageContainer.classList.add('cursor-none');
+				toggleBtn.innerText = 'SHUTTER: ON';
+			} else {
+				cursor.style.display = 'none';
+				pageContainer.classList.remove('cursor-none');
+				toggleBtn.innerText = 'SHUTTER: OFF';
+			}
+		});
+	}
+	
+	// Track mouse movement smoothly
+	document.addEventListener('mousemove', (e) => {
+		if(cursor && shutterEnabled) {
+			cursor.style.left = e.clientX + 'px';
+			cursor.style.top = e.clientY + 'px';
+		}
+	});
+
+	// Handle Shutter click logic
+	const links = document.querySelectorAll('.shutter-link');
+	
+	links.forEach(link => {
+		link.addEventListener('click', (e) => {
+			e.preventDefault();
+			const targetUrl = link.getAttribute('href');
+			
+			if(cursor && shutterEnabled) {
+				// Trigger true shutter close animation
+				cursor.classList.add('shutter-closed');
+				
+				// Flash screen behind the closed shutter
+				setTimeout(() => {
+					document.body.style.backgroundColor = '#000';
+					document.body.style.transition = 'background-color 0.1s';
+				}, 400);
+
+				// Wait for animation, then navigate
+				setTimeout(() => {
+					if(targetUrl && targetUrl !== '#') {
+						window.location.href = targetUrl;
+					} else {
+						// Revert if dummy link
+						cursor.classList.remove('shutter-closed');
+						document.body.style.backgroundColor = '#f2f2f2';
+					}
+				}, 600);
+			} else {
+				// Fallback navigation if shutter is OFF
+				if(targetUrl && targetUrl !== '#') {
+					window.location.href = targetUrl;
+				}
+			}
+		});
+	});
+</script>

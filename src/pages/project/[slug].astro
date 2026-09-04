@@ -1,0 +1,201 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+	const projects = await getCollection('projects');
+	return projects.map(project => ({
+		params: { slug: project.id },
+		props: { project },
+	}));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<Layout title={`${project.data.title} | Portfolio`} fullWidth={true}>
+	
+	<!-- 다크모드 씨네마틱 배경 -->
+	<div class="min-h-screen bg-[#050505] text-[#e0e0e0] py-20 px-6 md:px-12 relative selection:bg-white selection:text-black">
+		
+		<!-- 상단 뒤로가기 버튼 -->
+		<div class="max-w-5xl mx-auto mb-12">
+			<a href="/project" class="inline-flex items-center gap-3 text-gray-500 hover:text-white transition-colors font-mono uppercase tracking-widest text-xs group">
+				<span class="w-6 h-[1px] bg-gray-500 group-hover:bg-white transition-colors relative">
+					<span class="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-[1px] bg-inherit -rotate-45 origin-left"></span>
+					<span class="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-[1px] bg-inherit rotate-45 origin-left"></span>
+				</span>
+				Back to Archive
+			</a>
+		</div>
+
+		<article class="max-w-5xl mx-auto">
+			
+			<!-- HEADER: 영화 슬레이트(Clapperboard) 컨셉 -->
+			<header class="mb-20">
+				<div class="bg-[#111] rounded-t-xl border-b-[8px] border-[#080808] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden relative">
+					
+					<!-- 슬레이트 사선 무늬 막대 (Clapper stick) -->
+					<div class="h-10 w-full bg-[repeating-linear-gradient(45deg,#f2f2f2_0,#f2f2f2_30px,#111_30px,#111_60px)] shadow-md relative z-10 flex items-center justify-end px-4">
+						<div class="w-3 h-3 rounded-full bg-[#333] shadow-inner"></div>
+					</div>
+					
+					<!-- 슬레이트 보드 내용 -->
+					<div class="p-8 md:p-14 relative bg-[#111]">
+						<h1 class="text-5xl md:text-7xl font-bold mb-10 text-white tracking-tight">{project.data.title}</h1>
+						
+						<!-- 슬레이트 정보 그리드 -->
+						<div class="grid grid-cols-2 md:grid-cols-4 gap-8 font-mono border-t border-dashed border-white/20 pt-8 pb-4">
+							<div>
+								<span class="block text-gray-500 mb-2 uppercase tracking-widest text-[10px]">Production</span>
+								<span class="text-white text-sm md:text-base uppercase tracking-wider">{project.data.category}</span>
+							</div>
+							<div>
+								<span class="block text-gray-500 mb-2 uppercase tracking-widest text-[10px]">Date</span>
+								<span class="text-white text-sm md:text-base">{project.data.period.start}</span>
+							</div>
+							<div>
+								<span class="block text-gray-500 mb-2 uppercase tracking-widest text-[10px]">Crew</span>
+								<span class="text-white text-sm md:text-base">{project.data.team.size} Members</span>
+							</div>
+							<div>
+								<span class="block text-gray-500 mb-2 uppercase tracking-widest text-[10px]">Status</span>
+								<span class="text-white text-sm md:text-base uppercase tracking-wider">{project.data.status}</span>
+							</div>
+						</div>
+						
+						<!-- 역할 태그 -->
+						<div class="mt-8 flex flex-wrap gap-2">
+							{project.data.role.map(r => (
+								<span class="px-4 py-2 bg-[#222] border border-white/10 text-xs rounded-sm text-gray-300 font-mono tracking-widest uppercase">{r}</span>
+							))}
+						</div>
+					</div>
+				</div>
+				
+				<!-- 외부 링크 (Github, Velog) -->
+				<div class="flex gap-4 mt-8 justify-end max-w-5xl mx-auto">
+					{project.data.github && (
+						<a href={project.data.github} target="_blank" rel="noopener noreferrer" class="px-6 py-3 border border-white/20 hover:bg-white hover:text-black transition-colors uppercase tracking-widest text-xs font-bold font-mono">
+							[ Github Repo ]
+						</a>
+					)}
+					{project.data.blog && (
+						<a href={project.data.blog} target="_blank" rel="noopener noreferrer" class="px-6 py-3 border border-white/20 hover:bg-white hover:text-black transition-colors uppercase tracking-widest text-xs font-bold font-mono">
+							[ Velog Post ]
+						</a>
+					)}
+				</div>
+			</header>
+
+			<!-- HERO IMAGE: 카메라 뷰파인더(Viewfinder) 컨셉 -->
+			<div class="w-full aspect-[21/9] bg-[#080808] relative mb-24 group overflow-hidden border border-white/5 shadow-2xl">
+				
+				<!-- 뷰파인더 UI 오버레이 -->
+				<div class="absolute inset-0 pointer-events-none z-10 p-6 md:p-10 flex flex-col justify-between">
+					<!-- 상단 모서리 및 REC -->
+					<div class="flex justify-between items-start">
+						<div class="w-12 h-12 border-t-2 border-l-2 border-white/30"></div>
+						<div class="flex items-center gap-3">
+							<div class="w-3 h-3 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]"></div>
+							<span class="text-red-500 font-mono text-sm font-bold tracking-widest">REC</span>
+						</div>
+						<div class="w-12 h-12 border-t-2 border-r-2 border-white/30"></div>
+					</div>
+					
+					<!-- 중앙 크로스헤어 (Crosshair) -->
+					<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 flex items-center justify-center opacity-20">
+						<div class="w-full h-[1px] bg-white absolute"></div>
+						<div class="h-full w-[1px] bg-white absolute"></div>
+						<div class="w-6 h-6 rounded-full border border-white absolute"></div>
+					</div>
+					
+					<!-- 하단 모서리 및 메타데이터 -->
+					<div class="flex justify-between items-end">
+						<div class="w-12 h-12 border-b-2 border-l-2 border-white/30"></div>
+						<div class="text-white/40 font-mono text-[10px] md:text-xs tracking-widest">
+							ISO 800 &nbsp;|&nbsp; F/2.8 &nbsp;|&nbsp; 24FPS
+						</div>
+						<div class="w-12 h-12 border-b-2 border-r-2 border-white/30"></div>
+					</div>
+				</div>
+
+				<!-- 실제 이미지 -->
+				{project.data.hero ? (
+					<img src={project.data.hero} alt="Hero" class="absolute inset-0 w-full h-full object-cover brightness-[0.6] group-hover:brightness-90 transition-all duration-1000 scale-105 group-hover:scale-100" />
+				) : (
+					<div class="absolute inset-0 flex items-center justify-center">
+						<span class="text-[#333] font-mono text-xl tracking-widest">NO SIGNAL</span>
+					</div>
+				)}
+			</div>
+
+			<!-- MARKDOWN CONTENT -->
+			<div class="prose prose-invert prose-lg max-w-3xl mx-auto cinematic-prose pb-32">
+				<Content />
+			</div>
+			
+		</article>
+	</div>
+</Layout>
+
+<style is:global>
+	/* 전체 페이지 배경색 다크모드 강제 오버라이드 */
+	body {
+		background-color: #050505 !important;
+	}
+
+	/* Cinematic Markdown 컨텐츠 스타일링 (Tailwind v4 에러 방지를 위해 일반 CSS 사용) */
+	.cinematic-prose h2 {
+		font-size: 2.25rem;
+		font-weight: 700;
+		margin-top: 6rem;
+		margin-bottom: 2.5rem;
+		padding-bottom: 1.5rem;
+		font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+		border-bottom: 1px solid rgba(255,255,255,0.1);
+		color: #ffffff;
+	}
+	.cinematic-prose h3 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-top: 4rem;
+		margin-bottom: 1.5rem;
+		color: #e5e7eb;
+		letter-spacing: 0.025em;
+	}
+	.cinematic-prose p {
+		color: #9ca3af;
+		line-height: 1.625;
+		margin-bottom: 2rem;
+		font-size: 1.125rem;
+		font-weight: 300;
+	}
+	.cinematic-prose strong {
+		color: #ffffff;
+		font-weight: 500;
+	}
+	.cinematic-prose ul {
+		color: #9ca3af;
+		margin-bottom: 2rem;
+		list-style-type: disc;
+		padding-left: 1.5rem;
+	}
+	.cinematic-prose li::marker {
+		color: #4b5563;
+	}
+	.cinematic-prose li {
+		margin-bottom: 0.75rem;
+	}
+	.cinematic-prose a {
+		color: #ffffff;
+		text-decoration: underline;
+		text-decoration-color: #4b5563;
+		text-underline-offset: 4px;
+		transition: text-decoration-color 0.2s;
+	}
+	.cinematic-prose a:hover {
+		text-decoration-color: #ffffff;
+	}
+</style>

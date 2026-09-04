@@ -1,0 +1,124 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Introduce | Portfolio" fullWidth={true}>
+	<!-- 
+		Figma Design Implementation: 
+		Split layout (Left: Sticky Profile, Right: Scrollable Content)
+	-->
+	<div class="flex flex-col lg:flex-row min-h-screen w-full">
+		
+		<!-- Left: Sticky Profile Card -->
+		<aside class="w-full lg:w-2/5 relative bg-[#494949]">
+			<div class="sticky top-0 h-screen text-white p-8 md:p-16 xl:p-24 shadow-2xl flex flex-col justify-center">
+				<!-- Photo Placeholder -->
+				<div class="w-full aspect-[3/4] bg-black/40 mb-8 overflow-hidden rounded">
+					<!-- Image will go here, currently a placeholder -->
+					<div class="w-full h-full flex items-center justify-center text-gray-500 font-mono text-sm">
+						[ Photo Placeholder ]
+					</div>
+				</div>
+				
+				<!-- Name & Title -->
+				<h1 class="text-5xl lg:text-6xl font-bold mb-4 font-serif tracking-wide">Fillip</h1>
+				<h2 class="text-xl lg:text-2xl text-gray-300 font-medium mb-8">BE Engineer</h2>
+				
+				<!-- Info details -->
+				<div class="space-y-3 text-sm lg:text-base text-gray-300 font-mono tracking-tight">
+					<p>Beyungil Oh</p>
+					<p>1998.03.05</p>
+					<p>dhquddlf5@gmail.com</p>
+				</div>
+			</div>
+		</aside>
+
+		<!-- Right: Scrollable Content -->
+		<main class="w-full lg:w-3/5 bg-[#F5F5F5] text-black p-8 md:p-16 xl:p-24 min-h-screen flex flex-col justify-center">
+			
+			<div class="space-y-24 max-w-3xl">
+				<!-- About me -->
+				<section>
+					<h3 class="text-2xl font-bold mb-6 border-b-2 border-black/10 pb-2">About me</h3>
+					<p class="text-gray-700 leading-relaxed font-medium">
+						사용자의 불편함에 집중하는 개발자<br/><br/>
+						"개발이 출발은 항상 얼마나 편리하고 이로울지 좋은가?"와 같이 사용자에게 맞춰져 있습니다. 기술도 사용자에게 가치있게 쓰이는 것에 관심이 많고 그렇기에 제가 생각하는 개발은 이렇습니다.<br/>
+						사용자의 입장에서 한번 더 생각해보는 사람, 이 시리즈는 개발자가 되기 위해 역량을 키우며 준비했습니다.
+					</p>
+				</section>
+
+				<!-- Education -->
+				<section>
+					<h3 class="text-2xl font-bold mb-6 border-b-2 border-black/10 pb-2">Education</h3>
+					<ul class="space-y-4">
+						<li class="flex flex-col sm:flex-row sm:gap-8">
+							<span class="text-gray-500 font-mono w-24 shrink-0">2024.02</span>
+							<span class="font-medium">경운대학교 컴퓨터소프트웨어과 졸업</span>
+						</li>
+						<li class="flex flex-col sm:flex-row sm:gap-8">
+							<span class="text-gray-500 font-mono w-24 shrink-0">2023.03</span>
+							<span class="font-medium">프로그래머스 웹 백엔드 데브코스 수료</span>
+						</li>
+					</ul>
+				</section>
+
+				<!-- Project -->
+				<section>
+					<h3 class="text-2xl font-bold mb-6 border-b-2 border-black/10 pb-2">Project</h3>
+					<ul class="space-y-4">
+						<li class="flex flex-col sm:flex-row sm:gap-8 hover:bg-black/5 p-2 -ml-2 rounded transition-colors cursor-pointer group">
+							<span class="font-bold w-48 shrink-0 group-hover:text-blue-600 transition-colors">메타버스 비대면 프로그램</span>
+							<span class="text-gray-600">(에어리프의 실현)</span>
+						</li>
+						<li class="flex flex-col sm:flex-row sm:gap-8 hover:bg-black/5 p-2 -ml-2 rounded transition-colors cursor-pointer group">
+							<span class="font-bold w-48 shrink-0 group-hover:text-blue-600 transition-colors">예약 시스템이 들어간 카페 관리</span>
+							<span class="text-gray-600">프로그램 & 관리자 페이지</span>
+						</li>
+						<li class="flex flex-col sm:flex-row sm:gap-8 hover:bg-black/5 p-2 -ml-2 rounded transition-colors cursor-pointer group">
+							<span class="font-bold w-48 shrink-0 group-hover:text-blue-600 transition-colors">스마트 미러 미세(먼지를 보여주는 거울)</span>
+							<span class="text-gray-600">미니 프로그램</span>
+						</li>
+						<li class="flex flex-col sm:flex-row sm:gap-8 hover:bg-black/5 p-2 -ml-2 rounded transition-colors cursor-pointer group">
+							<span class="font-bold w-48 shrink-0 group-hover:text-blue-600 transition-colors">Signal-buddy</span>
+							<span class="text-gray-600">(프로그래머스 데브코스)</span>
+						</li>
+					</ul>
+					<p class="text-sm text-gray-400 mt-4 italic">* 프로젝트 텍스트 클릭 시 Git 또는 게시판으로 이동하도록 연동 예정입니다.</p>
+				</section>
+
+				<!-- Awards -->
+				<section>
+					<h3 class="text-2xl font-bold mb-6 border-b-2 border-black/10 pb-2">Awards</h3>
+					<ul class="space-y-4 text-sm sm:text-base">
+						<li class="flex justify-between items-start">
+							<span class="text-gray-500 font-mono w-24 shrink-0">2018.06</span>
+							<span class="font-medium flex-grow">경운대학교 리포트공모전</span>
+							<span class="text-gray-500 text-right w-16">동상</span>
+						</li>
+						<li class="flex justify-between items-start">
+							<span class="text-gray-500 font-mono w-24 shrink-0">2021.11</span>
+							<span class="font-medium flex-grow">경운대학교 창업동아리경진대회</span>
+							<span class="text-gray-500 text-right w-16">입선</span>
+						</li>
+						<li class="flex justify-between items-start">
+							<span class="text-gray-500 font-mono w-24 shrink-0">2022.12</span>
+							<span class="font-medium flex-grow">캡스톤 디자인 경진대회</span>
+							<span class="text-gray-500 text-right w-16">장려상</span>
+						</li>
+						<li class="flex justify-between items-start">
+							<span class="text-gray-500 font-mono w-24 shrink-0">2023.02</span>
+							<span class="font-medium flex-grow">경운대학교 총장상</span>
+							<span class="text-gray-500 text-right w-16"></span>
+						</li>
+						<li class="flex justify-between items-start">
+							<span class="text-gray-500 font-mono w-24 shrink-0">2024.02</span>
+							<span class="font-medium flex-grow">학업우수 표창장</span>
+							<span class="text-gray-500 text-right w-16"></span>
+						</li>
+					</ul>
+				</section>
+			</div>
+			
+		</main>
+	</div>
+</Layout>

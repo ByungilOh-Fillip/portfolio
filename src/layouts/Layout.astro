@@ -1,0 +1,178 @@
+---
+import '../styles/global.css';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+	title: string;
+	fullWidth?: boolean;
+}
+
+const { title, fullWidth = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Developer Portfolio" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<ClientRouter />
+	</head>
+	<body class="bg-[#111] text-white antialiased selection:bg-white selection:text-black min-h-screen flex flex-col font-sans">
+		
+		<!-- 커스텀 트랜지션 오버레이 (32프레임 가로 필름 스트립) -->
+		<div id="film-transition-overlay" class="fixed inset-0 z-[9999] pointer-events-none opacity-0 transition-opacity duration-300 overflow-hidden bg-[#111]">
+			
+			<!-- 32프레임 가로 필름 스트립 -->
+			<div id="film-strip-container" class="absolute top-0 h-full flex film-jitter" style="width: 3200vw; transform: translateX(-3100vw);">
+				{Array.from({length: 32}).map((_, i) => (
+					<div class="w-screen h-full flex flex-col bg-[#222] border-r-[16px] border-[#050505] flex-shrink-0">
+						<!-- 상단 구멍 -->
+						<div class="h-16 md:h-20 w-full film-sprockets border-b-[4px] border-[#111]"></div>
+						
+						<!-- 스크린 (눈부심 방지: 벽에 빔을 쏜 듯한 질감과 비네팅 섀도우) -->
+						<div class="flex-grow bg-[#d4d0c5] relative flex items-center justify-center overflow-hidden shadow-[inset_0_0_150px_rgba(0,0,0,0.8)] border-y-2 border-black/80">
+							<!-- 텍스트 이미지 -->
+							<img src="/fillip-text.png" alt="Fillip" class="w-[70%] max-w-[500px] object-contain mix-blend-multiply text-flicker opacity-90" />
+							
+							<!-- 거친 벽 질감 노이즈 -->
+							<div class="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-multiply" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+							
+							<!-- 광원 느낌 (중앙이 미세하게 밝음) -->
+							<div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_0%,transparent_60%)]"></div>
+
+							<!-- 카운트다운 숫자 -->
+							<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+								<span class="text-[#222] font-mono text-[40vw] font-bold opacity-5 mix-blend-overlay">{32 - i}</span>
+							</div>
+						</div>
+
+						<!-- 하단 구멍 -->
+						<div class="h-16 md:h-20 w-full film-sprockets border-t-[4px] border-[#111]"></div>
+					</div>
+				))}
+			</div>
+			
+			<!-- 영사기 셔터 깜빡임 (부드러운 블링크) -->
+			<div class="absolute inset-0 pointer-events-none shutter-strobe z-40 mix-blend-multiply"></div>
+
+			<!-- 전체 렌즈/노이즈 오버레이 -->
+			<div class="absolute inset-0 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSJub25lIi8+CjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz4KPC9zdmc+')] opacity-20 scanlines z-50 mix-blend-overlay"></div>
+		</div>
+
+		<Navigation />
+		<main class={`flex-grow ${fullWidth ? 'w-full' : 'px-6 md:px-12 w-full max-w-7xl mx-auto'}`}>
+			<slot />
+		</main>
+		<Footer />
+
+		<script>
+			// Astro View Transitions 인터셉트
+			document.addEventListener('astro:before-preparation', (event) => {
+				const overlay = document.getElementById('film-transition-overlay');
+				const strip = document.getElementById('film-strip-container');
+				if(overlay && strip) {
+					strip.classList.remove('play-pan-right');
+					void strip.offsetWidth;
+					strip.classList.add('play-pan-right');
+
+					overlay.classList.remove('opacity-0', 'pointer-events-none');
+					overlay.classList.add('opacity-100', 'pointer-events-auto');
+				}
+				
+				const originalLoader = event.loader;
+				event.loader = async () => {
+					const minDelay = new Promise(resolve => setTimeout(resolve, 2000));
+					await Promise.all([originalLoader(), minDelay]);
+				};
+			});
+
+			document.addEventListener('astro:page-load', () => {
+				const overlay = document.getElementById('film-transition-overlay');
+				const strip = document.getElementById('film-strip-container');
+				if (overlay && overlay.classList.contains('opacity-100')) {
+					setTimeout(() => {
+						overlay.classList.remove('opacity-100', 'pointer-events-auto');
+						overlay.classList.add('opacity-0', 'pointer-events-none');
+						setTimeout(() => strip?.classList.remove('play-pan-right'), 300);
+					}, 100);
+				}
+			});
+		</script>
+
+		<style is:global>
+			/* 필름 구멍 패턴 */
+			.film-sprockets {
+				background-color: #222;
+				background-image: linear-gradient(to right, transparent 0px, transparent 16px, #d4d0c5 16px, #d4d0c5 44px);
+				background-size: 60px 100%;
+			}
+
+			/* 찰칵찰칵 프레임 단위로 넘어가는 점프 애니메이션 (Steps) */
+			@keyframes panRight {
+				0% { transform: translateX(-3100vw); }
+				100% { transform: translateX(0); }
+			}
+			.play-pan-right {
+				/* 31번의 스텝으로 뚝.뚝.뚝 끊어지며 넘어감 (진짜 영사기 무브먼트) */
+				animation: panRight 2s steps(31, end) forwards;
+			}
+
+			/* 프레임이 넘어갈 때맞춰 부드럽게 깜빡이는 셔터 (2초 / 31스텝 = 약 0.0645초) */
+			@keyframes shutterStrobe {
+				0% { background-color: transparent; }
+				85% { background-color: transparent; }
+				95% { background-color: rgba(0, 0, 0, 0.5); } /* 프레임 교체 직전 어두워짐 */
+				100% { background-color: transparent; }
+			}
+			.shutter-strobe {
+				animation: shutterStrobe 0.064516s infinite;
+			}
+
+			/* 위아래 덜덜거리는 필름 텐션 (Jitter) */
+			@keyframes filmJitter {
+				0% { margin-top: 0px; }
+				25% { margin-top: -2px; }
+				50% { margin-top: 1px; }
+				75% { margin-top: -1px; }
+				100% { margin-top: 0px; }
+			}
+			.film-jitter {
+				animation: filmJitter 0.12s infinite;
+			}
+
+			/* 글자 떨림 */
+			@keyframes textFlicker {
+				0% { opacity: 0.9; transform: translate(0, 0); }
+				10% { opacity: 0.85; transform: translate(-1px, 1px); }
+				20% { opacity: 0.95; transform: translate(1px, -1px); }
+				30% { opacity: 0.88; transform: translate(-1px, 0); }
+				40% { opacity: 0.95; transform: translate(1px, 0); }
+				50% { opacity: 0.85; transform: translate(0, -1px); }
+				60% { opacity: 0.98; transform: translate(1px, 1px); }
+				70% { opacity: 0.88; transform: translate(-1px, -1px); }
+				80% { opacity: 0.95; transform: translate(0, 1px); }
+				90% { opacity: 0.85; transform: translate(-1px, 0); }
+				100% { opacity: 0.9; transform: translate(0, 0); }
+			}
+			.text-flicker {
+				animation: textFlicker 0.2s infinite;
+			}
+
+
+			/* 영사기 가로 스캔라인 흘러가는 효과 */
+			@keyframes scrollUp {
+				0% { background-position: 0 0; }
+				100% { background-position: 0 -100px; }
+			}
+			.scanlines {
+				animation: scrollUp 2s linear infinite;
+			}
+		</style>
+	</body>
+</html>

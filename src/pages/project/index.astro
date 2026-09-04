@@ -1,0 +1,191 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+// 작성된 마크다운 프로젝트들을 불러옴
+const projects = await getCollection('projects');
+// 순서대로 정렬
+projects.sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout title="Projects | Portfolio" fullWidth={true}>
+	<!-- GSAP ScrollTrigger를 위한 거대한 스크롤 컨테이너 -->
+	<div class="projects-wrapper bg-[#f2f2f2] relative overflow-hidden" style="height: 100vh;">
+		
+		<!-- Background Decorative Film Reel (스크롤에 따라 회전) -->
+		<div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-70 z-0" id="bg-reel">
+			<!-- 릴 외곽 테두리와 바디 -->
+			<div class="w-[900px] h-[900px] rounded-full bg-[#d5d5d5] border-[12px] border-[#c0c0c0] flex items-center justify-center relative shadow-inner">
+				
+				<!-- 중심 구멍 -->
+				<div class="w-[120px] h-[120px] rounded-full bg-[#f2f2f2] absolute z-10 shadow-[inset_0_4px_10px_rgba(0,0,0,0.1)]"></div>
+				
+				<!-- 5개의 큰 구멍 (레퍼런스 이미지 기반 72도 간격 배치) -->
+				<div class="absolute inset-0 flex items-center justify-center">
+					<div class="absolute w-[220px] h-[220px] rounded-full bg-[#f2f2f2] shadow-[inset_0_4px_10px_rgba(0,0,0,0.15)]" style="transform: rotate(0deg) translateY(-250px);"></div>
+					<div class="absolute w-[220px] h-[220px] rounded-full bg-[#f2f2f2] shadow-[inset_0_4px_10px_rgba(0,0,0,0.15)]" style="transform: rotate(72deg) translateY(-250px);"></div>
+					<div class="absolute w-[220px] h-[220px] rounded-full bg-[#f2f2f2] shadow-[inset_0_4px_10px_rgba(0,0,0,0.15)]" style="transform: rotate(144deg) translateY(-250px);"></div>
+					<div class="absolute w-[220px] h-[220px] rounded-full bg-[#f2f2f2] shadow-[inset_0_4px_10px_rgba(0,0,0,0.15)]" style="transform: rotate(216deg) translateY(-250px);"></div>
+					<div class="absolute w-[220px] h-[220px] rounded-full bg-[#f2f2f2] shadow-[inset_0_4px_10px_rgba(0,0,0,0.15)]" style="transform: rotate(288deg) translateY(-250px);"></div>
+				</div>
+				
+				<!-- 중심을 둘러싼 작은 점/볼트 장식들 (선택적 디테일) -->
+				<div class="absolute inset-0 flex items-center justify-center">
+					{[...Array(5)].map((_, i) => (
+						<div class="absolute w-4 h-4 rounded-full bg-[#b0b0b0]" style={`transform: rotate(${i * 72 + 36}deg) translateY(-120px);`}></div>
+					))}
+				</div>
+			</div>
+		</div>
+
+		<!-- 실제 화면에 고정되어 가로로 움직이는 트랙 -->
+		<div class="pin-container h-screen w-full flex items-center z-10 relative">
+			<div class="film-track flex items-center pl-[10vw] pr-[50vw]">
+				
+				<!-- 타이틀 -->
+				<div class="flex-shrink-0 w-[400px] flex flex-col justify-center mr-24 relative z-20">
+					<h1 class="text-7xl font-bold tracking-tight text-[#111]">Projects</h1>
+					<p class="text-[#666] mt-4 uppercase tracking-widest text-sm font-mono">Film Strip Layout</p>
+					<div class="w-12 h-1 bg-[#111] mt-8"></div>
+				</div>
+
+				<!-- 끊기지 않는 거대한 하나의 필름 띠 (Ribbon) -->
+				<div class="film-ribbon flex items-center h-[560px] bg-[#111] px-16 relative shadow-[0_30px_60px_rgba(0,0,0,0.4)]">
+					
+					<!-- 프로젝트 프레임들 -->
+					{projects.map((project, index) => (
+						<div class="group block flex-shrink-0 w-[500px] md:w-[640px] mx-10 relative z-10 transition-transform duration-500 hover:scale-[1.03]">
+							
+							<!-- 캡션 (필름 바깥쪽, 위쪽 띠) -->
+							<div class="absolute -top-12 left-0 text-white/50 font-mono text-xs tracking-widest">
+								FR-{String(index + 1).padStart(2, '0')}
+							</div>
+
+							<!-- 프로젝트 콘텐츠 영역 -->
+							<div class="aspect-[16/9] bg-[#050505] relative overflow-hidden border border-white/10 shadow-2xl">
+								
+								{/* 썸네일 이미지가 있으면 표시, 없으면 NO SIGNAL */}
+								{project.data.thumbnail ? (
+									<img src={project.data.thumbnail} alt={project.data.title} class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-20 transition-opacity duration-300" />
+								) : (
+									<span class="text-[#333] font-mono text-3xl tracking-widest absolute inset-0 flex items-center justify-center opacity-80 group-hover:opacity-0 transition-opacity">NO SIGNAL</span>
+								)}
+								
+								<!-- Hover 오버레이 정보 -->
+								<div class="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6">
+									<h2 class="text-4xl font-bold text-white mb-2">{project.data.title}</h2>
+									<p class="text-gray-400 text-sm uppercase tracking-wider mb-8">{project.data.category} | {project.data.period.start}</p>
+									
+									<div class="flex gap-4">
+										<!-- 상세보기 링크 -->
+										<a href={`/project/${project.id}`} class="text-xs font-bold uppercase tracking-widest border border-white/30 px-6 py-3 rounded-full text-white hover:bg-white hover:text-black transition-colors">
+											View Details
+										</a>
+										
+										<!-- Github 링크 -->
+										{project.data.github && (
+											<a href={project.data.github} target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest border border-white/30 bg-white/10 px-6 py-3 rounded-full text-white hover:bg-white hover:text-black transition-colors">
+												GitHub
+											</a>
+										)}
+										
+										<!-- Blog/Velog 링크 -->
+										{project.data.blog && (
+											<a href={project.data.blog} target="_blank" rel="noopener noreferrer" class="text-xs font-bold uppercase tracking-widest border border-white/30 bg-white/10 px-6 py-3 rounded-full text-white hover:bg-white hover:text-black transition-colors">
+												Velog
+											</a>
+										)}
+									</div>
+								</div>
+							</div>
+							
+							<!-- 캡션 (필름 바깥쪽, 아래쪽 띠) -->
+							<div class="absolute -bottom-12 right-0 text-white/50 font-mono text-xs uppercase tracking-widest">
+								{project.data.status}
+							</div>
+						</div>
+					))}
+				</div>
+
+			</div>
+		</div>
+	</div>
+</Layout>
+
+<script>
+	import { gsap } from "gsap";
+	import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+	if (typeof window !== 'undefined') {
+		gsap.registerPlugin(ScrollTrigger);
+
+		const track = document.querySelector('.film-track');
+		const wrapper = document.querySelector('.projects-wrapper');
+		const bgReel = document.getElementById('bg-reel');
+
+		if(track && wrapper) {
+			setTimeout(() => {
+				const trackWidth = track.scrollWidth;
+				const viewportWidth = window.innerWidth;
+				const moveAmount = trackWidth - viewportWidth;
+
+				// 1. 가로 스크롤 애니메이션
+				gsap.to(track, {
+					x: () => -moveAmount,
+					ease: "none",
+					scrollTrigger: {
+						trigger: wrapper,
+						start: "top top",
+						end: () => `+=${moveAmount}`,
+						pin: true,
+						scrub: 1,
+						invalidateOnRefresh: true,
+					}
+				});
+
+				// 2. 배경 릴 회전 애니메이션
+				if(bgReel) {
+					gsap.to(bgReel, {
+						rotate: 360,
+						ease: "none",
+						scrollTrigger: {
+							trigger: wrapper,
+							start: "top top",
+							end: () => `+=${moveAmount}`,
+							scrub: 1
+						}
+					});
+				}
+			}, 100);
+		}
+	}
+</script>
+
+<style>
+	body {
+		background-color: #f2f2f2 !important;
+	}
+
+	/* CSS 무한 스프로킷 구멍 (Sprocket holes) 패턴 */
+	/* 필름 리본의 위아래에 구멍을 뚫은 것처럼 렌더링합니다 */
+	.film-ribbon::before,
+	.film-ribbon::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		height: 24px;
+		/* 배경색상(#f2f2f2)과 동일한 색으로 블록을 만들고, 투명한 공간을 남겨 구멍처럼 보이게 함 */
+		background-image: linear-gradient(to right, transparent 0px, transparent 16px, #f2f2f2 16px, #f2f2f2 32px);
+		background-size: 32px 100%;
+		z-index: 1;
+	}
+
+	.film-ribbon::before {
+		top: 24px;
+	}
+
+	.film-ribbon::after {
+		bottom: 24px;
+	}
+</style>
