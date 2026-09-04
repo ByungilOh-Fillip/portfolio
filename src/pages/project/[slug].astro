@@ -21,7 +21,7 @@ const { Content } = await render(project);
 		
 		<!-- 상단 뒤로가기 버튼 -->
 		<div class="max-w-5xl mx-auto mb-12">
-			<a href={`${import.meta.env.BASE_URL}project`} class="inline-flex items-center gap-3 text-gray-500 hover:text-white transition-colors font-mono uppercase tracking-widest text-xs group">
+			<a href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/project`} class="inline-flex items-center gap-3 text-gray-500 hover:text-white transition-colors font-mono uppercase tracking-widest text-xs group">
 				<span class="w-6 h-[1px] bg-gray-500 group-hover:bg-white transition-colors relative">
 					<span class="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-[1px] bg-inherit -rotate-45 origin-left"></span>
 					<span class="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-[1px] bg-inherit rotate-45 origin-left"></span>
