@@ -78,7 +78,7 @@ projects.sort((a, b) => a.data.order - b.data.order);
 									
 									<div class="flex gap-4">
 										<!-- 상세보기 링크 -->
-										<a href={`/project/${project.id}`} class="text-xs font-bold uppercase tracking-widest border border-white/30 px-6 py-3 rounded-full text-white hover:bg-white hover:text-black transition-colors">
+										<a href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/project/${project.id}`} class="text-xs font-bold uppercase tracking-widest border border-white/30 px-6 py-3 rounded-full text-white hover:bg-white hover:text-black transition-colors">
 											View Details
 										</a>
 										

@@ -74,6 +74,11 @@ const { title, fullWidth = false } = Astro.props;
 		<script>
 			// Astro View Transitions 인터셉트
 			document.addEventListener('astro:before-preparation', (event) => {
+				// 뒤로가기(back)일 때는 애니메이션 생략하고 바로 이동
+				if (event.direction === 'back') {
+					return;
+				}
+
 				const overlay = document.getElementById('film-transition-overlay');
 				const strip = document.getElementById('film-strip-container');
 				if(overlay && strip) {
@@ -95,12 +100,13 @@ const { title, fullWidth = false } = Astro.props;
 			document.addEventListener('astro:page-load', () => {
 				const overlay = document.getElementById('film-transition-overlay');
 				const strip = document.getElementById('film-strip-container');
-				if (overlay && overlay.classList.contains('opacity-100')) {
+				if (overlay) {
+					// 페이지 로드 시 무조건 오버레이 숨기기 (뒤로가기 캐시 찌꺼기 방지)
 					setTimeout(() => {
 						overlay.classList.remove('opacity-100', 'pointer-events-auto');
 						overlay.classList.add('opacity-0', 'pointer-events-none');
 						setTimeout(() => strip?.classList.remove('play-pan-right'), 300);
-					}, 100);
+					}, 50);
 				}
 			});
 		</script>
